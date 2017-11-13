@@ -50,6 +50,24 @@ app.get('/todos/:id', (req, res) => {
 
 });
 
+app.delete('/todos/:id', (req, res) => {
+  //get the id
+  let id = req.params.id;
+  // validate the id -> not valid? 404
+  if( !ObjectID.isValid(req.params.id) ){
+    return res.status(400).send();
+  }
+  // remove todo by id
+  Todo.findByIdAndRemove(id).then((todo) => {
+    if( !todo ){
+      return res.status(404).send("Todo not found");
+    }
+    res.status(200).send(todo);
+  }, (e) => {
+    res.status(400).send(e);
+  });
+});
+
 app.listen(3000, () => {
   console.log('Server started on port 3000');
 });
