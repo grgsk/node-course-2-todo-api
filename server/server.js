@@ -95,44 +95,26 @@ app.patch('/todos/:id', (req, res) => {
   });
 });
 
+// POST /users
+
+app.post('/users', (req, res) => {
+  let body = _.pick(req.body, ['email', 'password']);
+
+  // User.findByToken
+  // user.generateAuthToken
+
+  let user = new User(body);
+
+  user.save().then(() => {
+    return user.generateAuthToken()
+    // res.send(user);
+  }).then((token) => {
+    res.header('x-auth', token).send(user);
+  }).catch((e) => {
+    res.status(400).send(e);
+  })
+})
+
 app.listen(3000, () => {
   console.log('Server started on port 3000');
 });
-
-// let newTodo = new Todo({
-//   text: 'Cook dinner',
-//   completed: false,
-//   completedAt: NaN
-// });
-//
-// // newTodo.save().then((doc) => {
-// //   console.log("Save todo", doc);
-// // }, (e) => {
-// //   console.log(e);
-// // });
-//
-// let otherTodo = new Todo({
-//   text: 'Do something',
-//   completed: true,
-//   completedAt: 12345
-// });
-//
-// // otherTodo.save().then((doc) => {
-// //   console.log("Save todo", doc);
-// // }, (e) => {
-// //   console.log(e);
-// // });
-//
-// // User model
-// // email - required, trim, String, minlength
-//
-//
-// let user = new User({
-//   email: 'grgml@example.com'
-// });
-//
-// user.save().then((user) => {
-//   console.log(user);
-// }, (e) => {
-//   console.log(e);
-// })
